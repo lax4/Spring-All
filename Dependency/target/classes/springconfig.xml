@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	 http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="product" class="com.spring.four.Dependency.Product"> 
+		<constructor-arg value="574"></constructor-arg>
+		<constructor-arg value="bangle"></constructor-arg>
+		<constructor-arg value="500"></constructor-arg>
+		<constructor-arg value="good"></constructor-arg>
+	
+	</bean>
+	<bean id="order" class="com.spring.four.Dependency.Order"> 
+		<constructor-arg  value="1"></constructor-arg>
+		<constructor-arg  ref="product"></constructor-arg>
+	
+	</bean>
+</beans>

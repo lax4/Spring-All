@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Root element for the Spring bean configuration -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        ">
+
+	<!-- Enable annotation-driven transaction management -->
+	<tx:annotation-driven />
+
+	<!-- Define the data source bean -->
+	<bean name="ds"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+
+		<!-- Configure the JDBC driver and connection URL -->
+		<property name="driverClassName"
+			value="com.mysql.cj.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/spring_orm" />
+		<property name="username" value="root" />
+		<property name="password" value="1234" />
+	</bean>
+
+	<!-- Define the Hibernate SessionFactory bean -->
+	<bean name="factory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+
+		<!-- Reference the data source bean -->
+		<property name="dataSource" ref="ds" />
+
+		<!-- Configure Hibernate properties -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL57Dialect</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_Sql">true</prop>
+			</props>
+		</property>
+
+		<!-- Specify annotated entity classes -->
+		<property name="annotatedClasses">
+			<list>
+				<value>com.springjorm.StudentBean</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Define the HibernateTemplate bean -->
+	<bean name="template"
+		class="org.springframework.orm.hibernate5.HibernateTemplate">
+		<property name="sessionFactory" ref="factory"></property>
+	</bean>
+
+	<!-- Define the StudentDao bean -->
+	<bean name="stDao" class="com.springjorm.dao.StudentDaoImpl">
+		<property name="hibernateTemplate" ref="template" />
+	</bean>
+
+	<!-- Define the transaction manager bean for Hibernate -->
+	<bean name="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="factory" />
+	</bean>
+	
+
+</beans>
